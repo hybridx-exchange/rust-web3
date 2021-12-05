@@ -50,7 +50,8 @@ impl<'a> Visitor<'a> for BytesVisitor {
             let bytes = FromHex::from_hex(&value[2..]).map_err(|e| Error::custom(format!("Invalid hex: {}", e)))?;
             Ok(Bytes(bytes))
         } else if value.len() == 0 {
-            Ok(Bytes(FromHex::from_hex("0x0")))
+            let bytes = FromHex::from_hex("0").map_err(|e| Error::custom(format!("Invalid hex: {}", e)))?;
+            Ok(Bytes(bytes))
         } else {
             Err(Error::invalid_value(Unexpected::Str(value), &"0x prefix"))
         }
